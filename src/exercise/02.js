@@ -1,7 +1,7 @@
 // useCallback: custom hooks
 // http://localhost:3000/isolated/exercise/02.js
 
-import * as React from 'react'
+import {useReducer, useCallback, useEffect, useState} from 'react'
 import {
   fetchPokemon,
   PokemonForm,
@@ -9,7 +9,6 @@ import {
   PokemonInfoFallback,
   PokemonErrorBoundary,
 } from '../pokemon'
-import {useCallback} from 'react'
 
 // 🐨 this is going to be our generic asyncReducer
 function asyncReducer(state, action) {
@@ -30,11 +29,10 @@ function asyncReducer(state, action) {
 }
 
 function useAsync(initialState) {
-  const [state, dispatch] = React.useReducer(asyncReducer, {
+  const [state, dispatch] = useReducer(asyncReducer, {
     status: 'idle',
     data: null,
     error: null,
-
     ...initialState,
   })
   const {status, data, error} = state
@@ -60,7 +58,7 @@ function PokemonInfo({pokemonName}) {
     status: pokemonName ? 'pending' : 'idle',
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!pokemonName) return
     const pokemonPromise = fetchPokemon(pokemonName)
     run(pokemonPromise)
@@ -81,7 +79,7 @@ function PokemonInfo({pokemonName}) {
 }
 
 function App() {
-  const [pokemonName, setPokemonName] = React.useState('')
+  const [pokemonName, setPokemonName] = useState('')
 
   function handleSubmit(newPokemonName) {
     setPokemonName(newPokemonName)
@@ -105,7 +103,7 @@ function App() {
 }
 
 function AppWithUnmountCheckbox() {
-  const [mountApp, setMountApp] = React.useState(true)
+  const [mountApp, setMountApp] = useState(true)
   return (
     <div>
       <label>
