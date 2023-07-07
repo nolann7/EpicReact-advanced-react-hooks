@@ -1,11 +1,4 @@
-// useContext: Caching response data in context
-// 💯 caching in a context provider (exercise)
-// http://localhost:3000/isolated/exercise/03.extra-2.js
-
-// you can edit this here and look at the isolated page or you can copy/paste
-// this in the regular exercise file.
-
-import * as React from 'react'
+import {createContext, useReducer, useContext, useEffect, useState} from 'react'
 import {
   fetchPokemon,
   PokemonForm,
@@ -14,13 +7,10 @@ import {
   PokemonErrorBoundary,
 } from '../pokemon'
 import {useAsync} from '../utils'
-import {createContext} from 'react'
 
-// 🐨 Create a PokemonCacheContext
 const PokemonCacheContext = createContext()
-// 🐨 create a PokemonCacheProvider function
 function PokemonCacheProvider(props) {
-  const [cache, dispatch] = React.useReducer(pokemonCacheReducer, {})
+  const [cache, dispatch] = useReducer(pokemonCacheReducer, {})
 
   return (
     <PokemonCacheContext.Provider value={[cache, dispatch]}>
@@ -30,7 +20,7 @@ function PokemonCacheProvider(props) {
 }
 
 function usePokemonCache() {
-  const pokemonCache = React.useContext(PokemonCacheContext)
+  const pokemonCache = useContext(PokemonCacheContext)
   if (!pokemonCache)
     throw new Error('you using Context state not inside Context Provider')
   return pokemonCache
@@ -56,7 +46,7 @@ function PokemonInfo({pokemonName: externalPokemonName}) {
     status: pokemonName ? 'pending' : 'idle',
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!pokemonName) {
       return
     } else if (cache[pokemonName]) {
@@ -123,7 +113,7 @@ function PokemonSection({onSelect, pokemonName}) {
 }
 
 function App() {
-  const [pokemonName, setPokemonName] = React.useState(null)
+  const [pokemonName, setPokemonName] = useState(null)
 
   function handleSubmit(newPokemonName) {
     setPokemonName(newPokemonName)

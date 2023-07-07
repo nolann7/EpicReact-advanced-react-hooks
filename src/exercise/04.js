@@ -6,7 +6,8 @@ import * as React from 'react'
 function MessagesDisplay({messages}) {
   const containerRef = React.useRef()
   // 🐨 replace useEffect with useLayoutEffect
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
+    // React.useEffect(() => {
     containerRef.current.scrollTop = containerRef.current.scrollHeight
   })
 
@@ -31,7 +32,8 @@ function sleep(time = 0) {
 function SlooooowSibling() {
   // try this with useLayoutEffect as well to see
   // how it impacts interactivity of the page before updates.
-  React.useEffect(() => {
+  // React.useEffect(() => {
+  React.useLayoutEffect(() => {
     // increase this number to see a more stark difference
     sleep(300)
   })
@@ -50,15 +52,17 @@ function App() {
       : null
 
   return (
-    <div className="messaging-app">
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <button onClick={addMessage}>add message</button>
-        <button onClick={removeMessage}>remove message</button>
+    <React.StrictMode>
+      <div className="messaging-app">
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <button onClick={addMessage}>add message</button>
+          <button onClick={removeMessage}>remove message</button>
+        </div>
+        <hr />
+        <MessagesDisplay messages={messages} />
+        <SlooooowSibling />
       </div>
-      <hr />
-      <MessagesDisplay messages={messages} />
-      <SlooooowSibling />
-    </div>
+    </React.StrictMode>
   )
 }
 
